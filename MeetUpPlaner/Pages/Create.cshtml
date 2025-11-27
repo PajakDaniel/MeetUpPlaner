@@ -1,0 +1,38 @@
+﻿@page
+@model MeetUpPlaner.Pages.CreateModel
+@{
+    ViewData["Title"] = "Create Event";
+}
+<h1>Create Event</h1>
+
+<form method="post">
+    <div class="mb-3">
+        <label asp-for="Event.Title" class="form-label"></label>
+        <input asp-for="Event.Title" class="form-control" />
+        <span asp-validation-for="Event.Title" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Event.StartDate" class="form-label"></label>
+        <input asp-for="Event.StartDate" class="form-control" type="datetime-local" />
+        <span asp-validation-for="Event.StartDate" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Event.Location" class="form-label"></label>
+        <input asp-for="Event.Location" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Event.Capacity" class="form-label"></label>
+        <input asp-for="Event.Capacity" class="form-control" type="number" min="0" />
+        <span class="form-text">0 = unlimited</span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Event.Description" class="form-label"></label>
+        <textarea asp-for="Event.Description" class="form-control" rows="4"></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a asp-page="Index" class="btn btn-secondary ms-2">Cancel</a>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

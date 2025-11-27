@@ -1,0 +1,5 @@
+﻿Seed run at 2025-11-27 17:16:26Z
+ADMIN (existing): admin@example.com / P@ssw0rd1
+USER (existing): alice@example.com / P@ssw0rd1
+USER (existing): bob@example.com / P@ssw0rd1
+USER (existing): charlie@example.com / P@ssw0rd1

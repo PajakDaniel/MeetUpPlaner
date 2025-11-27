@@ -1,0 +1,15 @@
+﻿@page "{id:int}"
+@model Pages.DeleteModel
+@{
+    ViewData["Title"] = "Delete Event";
+}
+<h1>Delete Event</h1>
+
+<div class="alert alert-warning">
+    Are you sure you want to delete "<strong>@Model.Event?.Title</strong>"?
+</div>
+
+<form method="post">
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-page="Index" class="btn btn-secondary ms-2">Cancel</a>
+</form>

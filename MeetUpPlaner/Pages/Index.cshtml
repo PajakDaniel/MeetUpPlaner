@@ -1,0 +1,37 @@
+﻿@page
+@model MeetUpPlaner.Pages.IndexModel
+@{
+    ViewData["Title"] = "Events";
+}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Upcoming Events</h1>
+    @if (User.Identity?.IsAuthenticated ?? false)
+    {
+        <a class="btn btn-primary" asp-page="Create">Create Event</a>
+    }
+</div>
+
+<table class="table table-hover">
+    <thead>
+        <tr><th>Title</th><th>Date</th><th>Location</th><th>Attendees</th><th></th></tr>
+    </thead>
+    <tbody>
+        @foreach (var ev in Model.Events)
+        {
+            <tr>
+                <td>@ev.Title</td>
+                <td>@ev.StartDate.ToLocalTime().ToString("g")</td>
+                <td>@ev.Location</td>
+                <td>@ev.CurrentAttendeeCount / @(ev.Capacity == 0 ? "∞" : ev.Capacity.ToString())</td>
+                <td>
+                    <a class="btn btn-sm btn-outline-primary" asp-page="Details" asp-route-id="@ev.Id">Details</a>
+                    @if (User.Identity?.IsAuthenticated == true && (Model.CurrentUserId == ev.CreatedByUserId || Model.CurrentUserIsAdmin))
+                    {
+                        <a class="btn btn-sm btn-outline-secondary" asp-page="Edit" asp-route-id="@ev.Id">Edit</a>
+                        <a class="btn btn-sm btn-outline-danger" asp-page="Delete" asp-route-id="@ev.Id">Delete</a>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

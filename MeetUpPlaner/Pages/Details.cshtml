@@ -1,0 +1,104 @@
+﻿@page "{id:int}"
+@model MeetUpPlaner.Pages.DetailsModel
+@{
+    ViewData["Title"] = Model.Event?.Title ?? "Event Details";
+}
+<h1>@Model.Event?.Title</h1>
+<p class="text-muted">@Model.Event?.StartDate.ToLocalTime().ToString("F") - @Model.Event?.Location</p>
+<p>@Model.Event?.Description</p>
+
+<p><strong>Attendees:</strong> @Model.Event?.CurrentAttendeeCount / @(Model.Event?.Capacity == 0 ? "∞" : Model.Event?.Capacity.ToString())</p>
+
+@if (User.Identity?.IsAuthenticated ?? false)
+{
+    if (!Model.UserRsvpExists)
+    {
+        <div class="mb-3">
+            <form method="post" asp-page-handler="Rsvp" class="d-inline">
+                <input type="hidden" name="id" value="@Model.Event.Id" />
+                <input type="hidden" name="status" value="Going" />
+                <button type="submit" class="btn btn-success">I'm Going</button>
+            </form>
+
+            <form method="post" asp-page-handler="Rsvp" class="d-inline ms-2">
+                <input type="hidden" name="id" value="@Model.Event.Id" />
+                <input type="hidden" name="status" value="Interested" />
+                <button type="submit" class="btn btn-outline-secondary">I'm Interested</button>
+            </form>
+
+            <form method="post" asp-page-handler="Rsvp" class="d-inline ms-2">
+                <input type="hidden" name="id" value="@Model.Event.Id" />
+                <input type="hidden" name="status" value="NotGoing" />
+                <button type="submit" class="btn btn-outline-danger">Not Going</button>
+            </form>
+        </div>
+    }
+    else
+    {
+        <div class="mb-3">
+            <div class="alert alert-info">You RSVPed: @Model.UserRsvpStatus</div>
+
+            <div>
+                <form method="post" asp-page-handler="ChangeStatus" class="d-inline">
+                    <input type="hidden" name="id" value="@Model.Event.Id" />
+                    <input type="hidden" name="status" value="Going" />
+                    <button type="submit" class="btn btn-sm btn-success">Set to Going</button>
+                </form>
+
+                <form method="post" asp-page-handler="ChangeStatus" class="d-inline ms-2">
+                    <input type="hidden" name="id" value="@Model.Event.Id" />
+                    <input type="hidden" name="status" value="Interested" />
+                    <button type="submit" class="btn btn-sm btn-outline-secondary">Set to Interested</button>
+                </form>
+
+                <form method="post" asp-page-handler="ChangeStatus" class="d-inline ms-2">
+                    <input type="hidden" name="id" value="@Model.Event.Id" />
+                    <input type="hidden" name="status" value="NotGoing" />
+                    <button type="submit" class="btn btn-sm btn-outline-danger">Set to Not Going</button>
+                </form>
+
+                <form method="post" asp-page-handler="Cancel" class="d-inline ms-3">
+                    <input type="hidden" name="id" value="@Model.Event.Id" />
+                    <button type="submit" class="btn btn-sm btn-outline-dark">Cancel RSVP</button>
+                </form>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <a asp-area="Identity" asp-page="/Account/Login" class="btn btn-outline-primary">Log in to RSVP</a>
+}
+
+<h3 class="mt-4">Attendees</h3>
+@if (Model.Attendees.Any())
+{
+    <ul class="list-unstyled">
+        @foreach (var a in Model.Attendees)
+        {
+            <li class="d-flex align-items-center mb-2">
+                <div class="me-2">
+                    <strong>@a.DisplayName</strong>
+                </div>
+                <div>
+                    @if (a.Status == MeetUpPlaner.Models.RsvpStatus.Going)
+                    {
+                        <span class="badge bg-success">Going</span>
+                    }
+                    else if (a.Status == MeetUpPlaner.Models.RsvpStatus.Interested)
+                    {
+                        <span class="badge bg-secondary">Interested</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-light text-dark">Not Going</span>
+                    }
+                </div>
+            </li>
+        }
+    </ul>
+}
+else
+{
+    <p>No attendees yet.</p>
+}
