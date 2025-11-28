@@ -36,7 +36,6 @@ namespace MeetUpPlaner.Data
 
         public async Task SeedAsync()
         {
-            // Ensure migrations
             await _db.Database.MigrateAsync();
 
             var seededLines = new List<string>
@@ -44,7 +43,6 @@ namespace MeetUpPlaner.Data
                 $"Seed run at {DateTime.UtcNow:u}"
             };
 
-            // Create Admin role
             var adminRoleName = "Admin";
             if (!await _roleManager.RoleExistsAsync(adminRoleName))
             {
@@ -55,7 +53,6 @@ namespace MeetUpPlaner.Data
                     _logger.LogWarning("Failed to create role '{Role}': {Errors}", adminRoleName, string.Join(", ", res.Errors.Select(e => e.Description)));
             }
 
-            // Deterministic admin account
             var adminEmail = _config["Seed:AdminEmail"] ?? "admin@example.com";
             var adminPassword = _config["Seed:AdminPassword"] ?? "P@ssw0rd1";
 

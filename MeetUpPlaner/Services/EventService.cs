@@ -75,7 +75,6 @@ namespace MeetUpPlaner.Services
             if (!isAdmin && ev.CreatedByUserId != currentUserId)
                 return OperationResult.Failure("Only the owner or an admin may delete this event.");
 
-            // Remove related RSVPs explicitly to ensure referential cleanup
             var rsvps = _db.Rsvps.Where(r => r.EventId == eventId);
             _db.Rsvps.RemoveRange(rsvps);
             _db.Events.Remove(ev);

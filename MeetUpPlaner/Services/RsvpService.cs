@@ -25,10 +25,8 @@ namespace MeetUpPlaner.Services
             return await _db.Rsvps.Where(r => r.EventId == eventId).ToListAsync();
         }
 
-        /// <summary>
         /// Create an RSVP if one doesn't exist and capacity allows.
         /// Returns Failure if duplicate or event is full (for Going).
-        /// </summary>
         public async Task<OperationResult> CreateRsvpAsync(int eventId, string userId, RsvpStatus status)
         {
             // Validate
@@ -43,7 +41,6 @@ namespace MeetUpPlaner.Services
             var existing = await _db.Rsvps.FirstOrDefaultAsync(r => r.EventId == eventId && r.UserId == userId);
             if (existing != null) return OperationResult.Failure("RSVP already exists.");
 
-            // Capacity enforcement for Going
             if (status == RsvpStatus.Going && ev.Capacity > 0 && ev.CurrentAttendeeCount >= ev.Capacity)
             {
                 return OperationResult.Failure("Event is full.");
@@ -104,7 +101,6 @@ namespace MeetUpPlaner.Services
             var ev = await _db.Events.FindAsync(eventId);
             if (ev == null) return OperationResult.Failure("Event not found.");
 
-            // If changing to Going, enforce capacity
             if (rsvp.Status != RsvpStatus.Going && newStatus == RsvpStatus.Going)
             {
                 if (ev.Capacity > 0 && ev.CurrentAttendeeCount >= ev.Capacity)
@@ -112,7 +108,6 @@ namespace MeetUpPlaner.Services
                 ev.CurrentAttendeeCount++;
             }
 
-            // If changing from Going to non-Going, decrement count
             if (rsvp.Status == RsvpStatus.Going && newStatus != RsvpStatus.Going && ev.CurrentAttendeeCount > 0)
             {
                 ev.CurrentAttendeeCount--;
