@@ -13,9 +13,9 @@ Demo accounts
 - Demo users: alice@example.com, bob@example.com, charlie@example.com (same password)
 
 Screenshots (place images in docs/screenshots/)
-- ![](docs/screenshots/events-index.png)
-- ![](docs/screenshots/event-details.png)
-- ![](docs/screenshots/admin-edit.png)
+ ![](docs/screenshots/events-index.png)
+ ![](docs/screenshots/event-details.png)
+ ![](docs/screenshots/admin-edit.png)
 
 Tech
 - .NET 10, EF Core (SQLite), ASP.NET Identity
